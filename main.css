@@ -1,0 +1,25 @@
+#result {
+    margin-left: 2em;
+    margin-right: 2em;
+    background-color: #cccccc;
+}
+
+#content {
+    width: 90%;
+}
+
+#input {
+    width: calc(100% - 10px);
+}
+
+.left-col {
+    margin-top: 2em;
+    float: left;
+    width: 49%;
+}
+
+.right-col {
+    margin-top: 2em;
+    float: right;
+    width: 49%;
+}
