@@ -1,7 +1,10 @@
 #result {
-    margin-left: 2em;
-    margin-right: 2em;
+    margin: 0em; .2em;
+    padding: 0.1em 0.7em;;
     background-color: #cccccc;
+
+    font-family: sans-serif;
+    font-size: 16
 }
 
 #content {
@@ -9,17 +12,24 @@
 }
 
 #input {
-    width: calc(100% - 10px);
+    margin: auto;
+    width: calc(100% - 5px);
+    font-family: mono;
+    font-size: 12;
+}
+
+#controls {
+    margin: 1em;
 }
 
 .left-col {
     margin-top: 2em;
     float: left;
-    width: 49%;
+    width: 59%;
 }
 
 .right-col {
     margin-top: 2em;
     float: right;
-    width: 49%;
+    width: 40%;
 }
