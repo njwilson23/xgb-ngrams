@@ -1,5 +1,20 @@
 
+import React from 'react';
+import ReactDOM from 'react-dom';
 import {featureGain} from './interactions.js';
+
+class Output extends React.Component {
+  render() {
+    return (
+        <div className="output">
+          <ol>
+            <li>Test1</li>
+            <li>Test2</li>
+          </ol>
+        </div>
+    );
+  }
+}
 
 document.getElementById("scanButton").addEventListener("click", function(event) {
     var outputArea = document.getElementById("result");
@@ -16,5 +31,4 @@ document.getElementById("scanButton").addEventListener("click", function(event) 
         s = s + "<p>" + imp[i].name + "\t" + imp[i].sum + "</p>"
     }
     outputArea.innerHTML = s;
-
 })

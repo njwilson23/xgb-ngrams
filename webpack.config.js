@@ -10,5 +10,20 @@ module.exports = {
     filename: '[name].js',
     //library: 'xgbi',
     //libraryTarget: 'var'
-  }
+  },
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015', 'react']
+        }
+      }
+    ]
+  },
+  stats: {
+    colors: true
+  },
+  devtool: 'source-map'
 };
