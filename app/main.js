@@ -3,31 +3,74 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {featureGain} from './interactions.js';
 
+function Button(props) {
+  return (
+      <button onClick={() => { console.log("here"); }}>Scan tree</button>
+  );
+}
+
+
 class Output extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      items: [{
+        features: "Nothing",
+        value: 0.0
+      }]
+    }
+  }
+  handleClick() {
+    console.log("click registered")
+    let inputArea = document.getElementById("input");
+    let trees = JSON.parse(inputArea.value);
+    // Search for interactions
+    let imp = featureGain(trees, degree);
+    this.state.items = [];
+    for (let i = 0; i != imp.length; i++) {
+      this.state.items.push({
+        features: imp[i].name,
+        value: imp[i].sum
+      });
+    }
+  }
   render() {
+    const items = this.state.items;
+    const listItems = items.map((item, i) => {
+      return <li key={i}>{item.features} <strong>{item.value}</strong></li>;
+    })
     return (
         <div className="output">
+          <Button
+            id="scanButton"
+            onClick={(i) => this.handleClick(i)}
+          />
+
           <ol>
-            <li>Test1</li>
-            <li>Test2</li>
+            {listItems}
           </ol>
         </div>
     );
   }
 }
 
+ReactDOM.render(
+  <Output />,
+  document.getElementById("result")
+)
+
 document.getElementById("scanButton").addEventListener("click", function(event) {
-    var outputArea = document.getElementById("result");
-    var inputArea = document.getElementById("input");
-    var degree = Number(document.getElementById("degControl").value);
+    const outputArea = document.getElementById("result");
+    const inputArea = document.getElementById("input");
+    const degree = Number(document.getElementById("degControl").value);
 
     // Get text area content
-    var trees = JSON.parse(inputArea.value);
+    const trees = JSON.parse(inputArea.value);
     // Search for interactions
-    var imp = featureGain(trees, degree);
+    const imp = featureGain(trees, degree);
     // Update result content
-    var s = "";
-    for (var i = 0; i != imp.length; i++) {
+    let s = "";
+    for (let i = 0; i != imp.length; i++) {
         s = s + "<p>" + imp[i].name + "\t" + imp[i].sum + "</p>"
     }
     outputArea.innerHTML = s;
