@@ -66,14 +66,13 @@ function mean(a) {
 
 /* Computes the mean gain associated with splitting on each feature
    and returns an array of {FEATURENAME: GAIN} objects */
-function featureGain(trees, degree) {
+export function featureGain(trees, degree) {
     var features = new Map();
     scanTree(trees, function(n) {
 
         /* creates a list of objects with a 'features' member (array
            of length degree) and a 'gain' member (number) */
         var featSets = accumulateSplits(n, degree);
-        console.log(featSets);
         var fs;
         for (var i = 0; i != featSets.length; i++) {
             fs = featSets[i];
