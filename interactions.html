@@ -70,7 +70,7 @@
         <div id="result">Blank</div>
     </div>
 </div>
-<script src="interactions.js"></script>
+<script src="dist/bundle.js"></script>
 <script>
     document.getElementById("scanButton").addEventListener("click", function(event) {
         var outputArea = document.getElementById("result");
@@ -80,7 +80,7 @@
         // Get text area content
         var trees = JSON.parse(inputArea.value);
         // Search for interactions
-        var imp = featureGain(trees, degree);
+        var imp = xgbi.featureGain(trees, degree);
         // Update result content
         var s = "";
         for (var i = 0; i != imp.length; i++) {
