@@ -1,12 +1,14 @@
 <meta charset="utf-8">
 <html>
 <head>
-    <link rel="stylesheet" href="main.css" />
+  <title>xgboost ngrams</title>
+  <link rel="stylesheet" href="main.css" />
 </head>
 <body>
 <div id="content">
-    <div class="left-col">
-      <textarea cols="80" rows="40" id="input">
+  <h1>xgboost ngrams</h1>
+  <div class="left-col">
+    <textarea onkeyup="growInput(this)" cols="80" id="input">
 [{"nodeid":0,"depth":0,"split":"odor=pungent","yes":2,"no":1,"gain":4000.53,"cover":1628.25,"children":[
 {"nodeid":1,"depth":1,"split":"stalk-root=cup","yes":4,"no":3,"gain":1158.21,"cover":924.5,"children":[
 {"nodeid":3,"depth":2,"split":"stalk-root=missing","yes":8,"no":7,"gain":568.216,"cover":812,"children":[
@@ -60,12 +62,19 @@
 {"nodeid":6,"leaf":0.3134,"cover":12.8021}
 ]}
 ]}]
-      </textarea>
-    </div>
-    <div class="right-col">
-        <div id="result"></div>
-    </div>
+    </textarea>
+  </div>
+  <div class="right-col">
+    <div id="result"></div>
+  </div>
 </div>
 <script src="dist/main.js"></script>
+<script>
+  function growInput(el) {
+    el.style.height = "5px";
+    el.style.height = (el.scrollHeight + 5) + "px";
+  }
+  growInput(document.getElementById("input"));
+</script>
 </body>
 </html>

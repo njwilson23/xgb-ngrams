@@ -20,6 +20,19 @@ function DegreeForm(props) {
   );
 }
 
+function ResultItem(props) {
+  console.log(props.features);
+  return (
+        <div className="resultItem">
+          <div>
+            <span className="featureName">{props.features}</span>
+            <span className="featureValue">{Math.round(props.value*1000)/1000}</span>
+          </div>
+          <div className="clear"></div>
+        </div>
+  );
+}
+
 class Output extends React.Component {
   constructor() {
     super();
@@ -65,7 +78,7 @@ class Output extends React.Component {
   render() {
     const items = this.state.items;
     const listItems = items.map((item, i) => {
-      return <li key={i}>{item.features} <strong>{item.value}</strong></li>;
+      return <ResultItem key={i} features={item.features} value={item.value} />;
     })
     return (
         <div className="output">
@@ -80,9 +93,7 @@ class Output extends React.Component {
             onClick={(i) => this.handleClick(i)}
           />
 
-          <ol>
-            {listItems}
-          </ol>
+          {listItems}
         </div>
     );
   }
