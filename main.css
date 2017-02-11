@@ -4,29 +4,31 @@
     margin: auto;
 }
 
-#input {
+textarea#input {
     margin: auto;
     padding: 0.5em;
     width: calc(100% - 5px);
     min-height: 100px;
     max-height: 4000px;
 
-    font-family: mono;
+    font-family: 'Fira Mono', mono;
     font-size: 12;
 
-    border-radius: 4px;
+    border-width: 0;
+    border-radius: 5px;
 }
 
 
 #result {
     margin: 0em; .2em;
-    padding: 0.1em 0.7em;;
+    padding: 0.5em 0.7em;;
     background-color: white;
 
-    font-family: sans-serif;
+    font-family: Lato, sans-serif;
+    font-weight: 300;
     font-size: 16;
 
-    border-radius: 4px;
+    border-radius: 5px;
 }
 
 #controls {
@@ -35,12 +37,14 @@
 
 .left-col {
     margin-top: .5em;
+    margin-bottom: 1em;
     float: left;
     width: 59%;
 }
 
 .right-col {
     margin-top: .5em;
+    margin-bottom: 1em;
     float: right;
     width: 40%;
 }
@@ -66,6 +70,7 @@ body {
 }
 
 h1 {
-    font-family: sans-serif;
+    font-family: Lato, sans-serif;
+    font-weight: 300;
     color: white;
 }

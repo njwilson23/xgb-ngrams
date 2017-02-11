@@ -11,12 +11,12 @@ function Button(props) {
 
 function DegreeForm(props) {
   return (
-        <input type="number"
+        <span>Degree: <input type="number"
           value={props.value}
           min="0"
           max="4"
           onChange={props.handleChange}
-        />
+        /></span>
   );
 }
 
