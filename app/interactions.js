@@ -1,29 +1,36 @@
 /* Walk through a tree in a depth-first fashion, applying a callback functin
    at every non-leaf node */
 function scanTree(ns, cb, maxDepth) {
-    if (typeof(maxDepth) === 'undefined') {
-        maxDepth = -1;
+  if (typeof(maxDepth) === 'undefined') {
+    maxDepth = -1;
+  }
+  for (let i = 0; i != ns.length && i != maxDepth; i++) {
+    let n = ns[i];
+    if (n.children) {
+      cb(n);
+      scanTree(n.children, cb, maxDepth - 1);
     }
-    for (let i = 0; i != ns.length && i != maxDepth; i++) {
-        let n = ns[i];
-        if (n.children) {
-            cb(n);
-            scanTree(n.children, cb, maxDepth - 1);
-        }
-    }
+  }
 }
 
 function splitString(s, by) {
   if (typeof(by) === 'undefined') {
     by = ' ';
   }
-  let out = new Array();
-  const i = s.indexOf(by);
-  if (i == -1) {
-    out.push(s);
+  let s_;
+  if (typeof(s.indexOf) === 'undefined') {
+    //console.log(s);
+    s_ = String(3);
   } else {
-    out.push(s.slice(0, i));
-    out.push.apply(out, splitString(s.slice(i + 1, s.length), by));
+    s_ = s
+  }
+  let out = new Array();
+  const i = s_.indexOf(by);
+  if (i == -1) {
+    out.push(s_);
+  } else {
+    out.push(s_.slice(0, i));
+    out.push.apply(out, splitString(s_.slice(i + 1, s_.length), by));
   }
   return out;
 }
@@ -32,31 +39,31 @@ function splitString(s, by) {
    return a list of objects '{features: <list>, count: <number>, gain: <number>}'
    representing all feature combinations. */
 function accumulateSplits(n, maxDepth) {
-    if (typeof(maxDepth) === 'undefined') { maxDepth = 0; }
-    if (typeof(n.split) === 'undefined') {
-        return [{features: "", count: 0, gain: 0.0}];
-    }
-    if (maxDepth === 0) {
-        return [{features: n.split, count: 1, gain: n.gain}];
-    }
+  if (typeof(maxDepth) === 'undefined') { maxDepth = 0; }
+  if (typeof(n.split) === 'undefined') {
+    return [{features: "", count: 0, gain: 0.0}];
+  }
+  if (maxDepth === 0) {
+    return [{features: n.split, count: 1, gain: n.gain}];
+  }
 
-    let results = new Array();
-    let subResults, feats;
-    let currentFeatures = new Array();
+  let results = new Array();
+  let subResults, feats;
+  let currentFeatures = new Array();
 
-    for (let i = 0; i != n.children.length; i++) {
-        subResults = accumulateSplits(n.children[i], maxDepth - 1)
-        for (let j = 0; j != subResults.length; j++) {
-            feats = splitString(subResults[j].features)
-              .filter(function(a) { return a !== "" });
-            feats.push(n.split);
-            feats.sort();
-            results.push( {features: feats.reduce((a, b) => { return a + "×" + b; }),
-                           count: 1 + subResults[j].count,
-                           gain: n.gain + subResults[j].gain} );
-        }
+  for (let i = 0; i != n.children.length; i++) {
+    subResults = accumulateSplits(n.children[i], maxDepth - 1)
+    for (let j = 0; j != subResults.length; j++) {
+      feats = splitString(subResults[j].features)
+        .filter(function(a) { return a !== "" });
+      feats.push(n.split);
+      feats.sort();
+      results.push( {features: feats.reduce((a, b) => { return a + "×" + b; }),
+                     count: 1 + subResults[j].count,
+                     gain: n.gain + subResults[j].gain} );
     }
-    return results;
+  }
+  return results;
 }
 
 /* Compute the arithmetic mean of an array */
@@ -67,38 +74,38 @@ function mean(v) {
 /* Computes the mean gain associated with splitting on each feature
    and returns an array of {FEATURENAME: GAIN} objects */
 export function featureGain(trees, degree) {
-    let features = new Map();
-    scanTree(trees, function(n) {
+  let features = new Map();
+  scanTree(trees, function(n) {
 
-        /* creates a list of objects with a 'features' member (array
-           of length degree) and a 'gain' member (number) */
-        let featSets = accumulateSplits(n, degree);
-        let fs;
-        for (let i = 0; i != featSets.length; i++) {
-            fs = featSets[i];
-            if (fs.count == degree + 1) {
-                if (features.has(fs.features)) {
-                    features.get(fs.features).push(fs.gain);
-                } else {
-                    features.set(fs.features, [fs.gain]);
-                }
-            }
+    /* creates a list of objects with a 'features' member (array
+       of length degree) and a 'gain' member (number) */
+    let featSets = accumulateSplits(n, degree);
+    let fs;
+    for (let i = 0; i != featSets.length; i++) {
+      fs = featSets[i];
+      if (fs.count == degree + 1) {
+        if (features.has(fs.features)) {
+          features.get(fs.features).push(fs.gain);
+        } else {
+          features.set(fs.features, [fs.gain]);
         }
-    });
+      }
+    }
+  });
 
-    let featureList = new Array();
-    features.forEach(function(v, k, m) {
-        featureList.push({name: k,
-                          mean: mean(v),
-                          sum: v.reduce((a, b) => { return a + b; })});
-    });
+  let featureList = new Array();
+  features.forEach(function(v, k, m) {
+    featureList.push({name: k,
+                      mean: mean(v),
+                      sum: v.reduce((a, b) => { return a + b; })});
+  });
 
-    featureList.sort((a, b) => { return b.sum - a.sum; })
-    return featureList;
+  featureList.sort((a, b) => { return b.sum - a.sum; });
+  return featureList;
 }
 
 // tests
-if (true) {
+if (false) {
 
   // splitString
   console.log(splitString("split|some|joined|words", "|"));
