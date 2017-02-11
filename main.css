@@ -1,31 +1,63 @@
 #content {
-    width: 98%;
+    width: 100%;
+    margin: auto;
+}
+
+#appContainer {
+    width: 100%;
     max-width: 200em;
     margin: auto;
+}
+
+body {
+    font-family: Lato, sans-serif;
+    font-weight: 300;
+    background-color: #0079b2;
+}
+
+h1 {
+    font-weight: 300;
+    color: white;
+}
+
+.col {
+    background-color: white;
+
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+
+    border-width: 0;
+    border-radius: 5px;
+}
+
+.left {
+    float: left;
+    width: 59%;
+}
+
+.right {
+    float: right;
+    width: 40%;
 }
 
 textarea#input {
     margin: auto;
     padding: 0.5em;
     width: calc(100% - 5px);
-    min-height: 100px;
-    max-height: 4000px;
+    height: 80vh;
 
     font-family: 'Fira Mono', mono;
-    font-size: 12;
+    font-size: 14;
 
     border-width: 0;
-    border-radius: 5px;
 }
 
 
 #result {
     margin: 0em; .2em;
     padding: 0.5em 0.7em;;
-    background-color: white;
+    background-color: #aaaaaa;
 
-    font-family: Lato, sans-serif;
-    font-weight: 300;
     font-size: 16;
 
     border-radius: 5px;
@@ -33,20 +65,6 @@ textarea#input {
 
 #controls {
     margin: 1em;
-}
-
-.left-col {
-    margin-top: .5em;
-    margin-bottom: 1em;
-    float: left;
-    width: 59%;
-}
-
-.right-col {
-    margin-top: .5em;
-    margin-bottom: 1em;
-    float: right;
-    width: 40%;
 }
 
 .resultItem {
@@ -63,14 +81,4 @@ textarea#input {
 
 .clear {
   clear: both;
-}
-
-body {
-    background-color: #0079b2;
-}
-
-h1 {
-    font-family: Lato, sans-serif;
-    font-weight: 300;
-    color: white;
 }

@@ -100,7 +100,7 @@ export function featureGain(trees, degree) {
                       sum: v.reduce((a, b) => { return a + b; })});
   });
 
-  featureList.sort((a, b) => { return b.sum - a.sum; });
+  featureList.sort((a, b) => { return b.mean - a.mean; });
   return featureList;
 }
 
