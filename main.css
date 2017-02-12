@@ -50,6 +50,7 @@ textarea#input {
     font-size: 14;
 
     border-width: 0;
+    border-top-left-radius: 5px;
 }
 
 
@@ -63,9 +64,25 @@ textarea#input {
     border-radius: 5px;
 }
 
-#controls {
-    margin: 1em;
+#fileUploader {
+  display: none;
 }
+
+div.button {
+  line-height: 2.8em;
+  text-align: center;
+  background-color: darkslategray;
+  color: white;
+  font-weight: 500;
+  transition-duration: 0.3s
+}
+
+div.clickable:hover {
+  background-color: cornflowerblue;
+  cursor: pointer;
+  transition-duration: 0.2s;
+}
+
 
 .resultItem {
   margin: 0.5em 0em;

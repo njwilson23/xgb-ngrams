@@ -5,18 +5,29 @@ import {featureGain} from './interactions.js';
 
 function Button(props) {
   return (
-      <button onClick={() => props.onClick()}>{props.value}</button>
+      <div style={props.style} className={"button " + props.className} onClick={props.onClick}>{props.value}</div>
   );
 }
 
 function DegreeForm(props) {
   return (
-      <span>Degree: <input type="number"
-        value={props.value}
-        min="0"
-        max="4"
-        onChange={props.onChange}
-      /></span>
+      <div style={{width: "100%", clear: "both"}}>
+        <div className="button" style={{width: "40%", float: "left", borderTopLeftRadius: "5px"}}>
+          {props.value}
+        </div>
+        <Button
+          style={{width: "30%", float: "left"}}
+          className="clickable"
+          onClick={props.incDown}
+          value="&#x25BC;"
+        />
+        <Button
+          style={{width: "30%", float: "left"}}
+          className="clickable"
+          onClick={props.incUp}
+          value="&#x25B2;"
+        />
+      </div>
   );
 }
 
@@ -36,10 +47,18 @@ function InputForm(props) {
 
 function UploadForm(props) {
   return (
-    <input type="file"
-      id="fileUploader"
-      onChange={props.onChange}
-    />
+    <div>
+      <input type="file"
+        id="fileUploader"
+        onChange={props.onChange}
+      />
+      <Button
+        className="fileUploader clickable"
+        style={props.style}
+        onClick={props.onClick}
+        value="Upload saved trees (JSON)"
+      />
+    </div>
   );
 }
 
@@ -68,6 +87,7 @@ class Application extends React.Component {
       }]
     }
     this.handleFileUpload = this.handleFileUpload.bind(this);
+    this.handleUploaderClick = this.handleUploaderClick.bind(this);
     this.handleInputFormChange = this.handleInputFormChange.bind(this);
     this.handleDegreeChange = this.handleDegreeChange.bind(this);
     this.handleScanClick = this.handleScanClick.bind(this);
@@ -107,8 +127,19 @@ class Application extends React.Component {
     this.setState({inputText: event.target.value});
   }
 
-  handleDegreeChange(event) {
-    this.setState({degree: Number(event.target.value)});
+  handleUploaderClick(event) {
+    document.getElementById("fileUploader").click();
+  }
+
+  handleDegreeChange(increase) {
+    const originalDegree = this.state.degree;
+    if (increase == true) {
+      console.log("increase");
+      this.setState({degree: Math.min(4, originalDegree + 1)});
+    } else if (increase == false) {
+      console.log("decrease");
+      this.setState({degree: Math.max(0, originalDegree - 1)});
+    }
   }
 
   handleScanClick() {
@@ -150,23 +181,32 @@ class Application extends React.Component {
             />
 
             <UploadForm
+              style={{borderBottomLeftRadius: "5px", borderBottomRightRadius: "5px"}}
               onChange={(files) => this.handleFileUpload(files)}
+              onClick={this.handleUploaderClick}
             />
           </div>
 
           <div className="col right">
-            <DegreeForm
-              value={this.state.degree}
-              onChange={(event) => this.handleDegreeChange(event)}
-            />
+            <div style={{width: "30%", float: "left"}}>
+              <DegreeForm
+                value={this.state.degree}
+                incUp={() => this.handleDegreeChange(true)}
+                incDown={() => this.handleDegreeChange(false)}
+              />
+            </div>
 
-            <Button
-              value="Scan tree"
-              id="scanButton"
-              onClick={this.handleScanClick}
-            />
+            <div style={{width: "70%", float: "right"}}>
+              <Button
+                style={{borderTopRightRadius: "5px"}}
+                value="Scan tree"
+                id="scanButton"
+                className="clickable"
+                onClick={this.handleScanClick}
+              />
+            </div>
 
-            <div>
+            <div className="clear">
               {listItems}
             </div>
           </div>
