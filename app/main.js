@@ -5,7 +5,10 @@ import {featureGain} from './interactions.js';
 
 function Button(props) {
   return (
-      <div style={props.style} className={"button " + props.className} onClick={props.onClick}>{props.value}</div>
+      <div style={props.style}
+        className={"button " + props.className}
+        id={props.id}
+        onClick={props.onClick}>{props.value}</div>
   );
 }
 
@@ -84,13 +87,14 @@ class Application extends React.Component {
       items: [{
         features: "Nothing",
         value: 0.0
-      }]
+      }],
+      helpLabel: "Explanation \u25BC",
+      helpClass: "helpInactive"
     }
     this.handleFileUpload = this.handleFileUpload.bind(this);
-    this.handleUploaderClick = this.handleUploaderClick.bind(this);
-    this.handleInputFormChange = this.handleInputFormChange.bind(this);
     this.handleDegreeChange = this.handleDegreeChange.bind(this);
     this.handleScanClick = this.handleScanClick.bind(this);
+    this.toggleHelp = this.toggleHelp.bind(this);
   }
 
   handleFileUpload(event) {
@@ -110,25 +114,6 @@ class Application extends React.Component {
     }
     request.open("GET", objectURL);
     request.send();
-  }
-
-  setInputFormSize(event) {
-    /*const el = event.target;
-    const h = window.innerHeight - 120;
-    if (el.scrollHeight < h) {
-      el.style.height = "5px";
-      el.style.height = (el.scrollHeight + 5) + "px";
-    } else if (el.style.height != h + 5) {
-      el.style.height = h + 5 + "px";
-    }*/
-  }
-
-  handleInputFormChange(event) {
-    this.setState({inputText: event.target.value});
-  }
-
-  handleUploaderClick(event) {
-    document.getElementById("fileUploader").click();
   }
 
   handleDegreeChange(increase) {
@@ -167,23 +152,36 @@ class Application extends React.Component {
     }
   }
 
+  toggleHelp() {
+    if (this.state.helpClass == "helpInactive") {
+      this.setState({helpClass: "helpActive"});
+      this.setState({helpLabel: "Explanation \u25B2"});
+    } else {
+      this.setState({helpClass: "helpInactive"});
+      this.setState({helpLabel: "Explanation \u25BC"});
+    }
+  }
+
   render() {
     const listItems = this.state.items.map((item, i) => {
       return <ResultRow key={i} features={item.features} value={item.value} />;
     })
     return (
         <div id="appContainer">
+          <Button className="clickable" id="helpButton" value={this.state.helpLabel} onClick={this.toggleHelp} />
+          <HelpBlurb className={this.state.helpClass} />
+          <div className="clear"/>
+
           <div className="col left">
             <InputForm
               value={this.state.inputText}
-              onChange={this.handleInputFormChange}
-              onKeyUp={this.setInputFormSize}
+              onChange={(event) => { this.setState({inputText: event.target.value}); }}
             />
 
             <UploadForm
               style={{borderBottomLeftRadius: "5px", borderBottomRightRadius: "5px"}}
               onChange={(files) => this.handleFileUpload(files)}
-              onClick={this.handleUploaderClick}
+              onClick={() => { document.getElementById("fileUploader").click(); }}
             />
           </div>
 
@@ -295,7 +293,15 @@ const DEFAULT_TREE = `[  { "nodeid": 0, "depth": 0, "split": "odor=pungent", "ye
     ]}
   ]}]`;
 
+function HelpBlurb(props) {
+  return(
+      <div className={props.className}>
+        <p>The 'importance' of a predictor in a decision tree can be approximated by the mean relative gain attained whenever that predictor is used to split a node. This is a generalization of feature importance to sequences of features, which may be used to better understand a dataset and infer interactions between predictors.</p>
 
+        <p>Enter an array of decision trees in JSON format or uploaded a file. Set the degree of the feature interactions (0 is equivalent to no interactions), and hit "Scan tree."</p>
+      </div>
+  );
+}
 
 ReactDOM.render(
   <Application />,

@@ -1,14 +1,14 @@
 /* Walk through a tree in a depth-first fashion, applying a callback functin
    at every non-leaf node */
-function scanTree(ns, cb, maxDepth) {
+function scanTree(ns, callback, maxDepth) {
   if (typeof(maxDepth) === 'undefined') {
     maxDepth = -1;
   }
   for (let i = 0; i != ns.length && i != maxDepth; i++) {
     let n = ns[i];
     if (n.children) {
-      cb(n);
-      scanTree(n.children, cb, maxDepth - 1);
+      callback(n);
+      scanTree(n.children, callback, maxDepth - 1);
     }
   }
 }
@@ -19,7 +19,6 @@ function splitString(s, by) {
   }
   let s_;
   if (typeof(s.indexOf) === 'undefined') {
-    //console.log(s);
     s_ = String(3);
   } else {
     s_ = s
