@@ -1,8 +1,3 @@
-#content {
-    width: 100%;
-    margin: auto;
-}
-
 #appContainer {
     width: 100%;
     max-width: 200em;
@@ -31,13 +26,14 @@ h1 {
 }
 
 .left {
-    float: left;
-    width: 59%;
+  float: left;
+  width: 59%;
 }
 
 .right {
-    float: right;
-    width: 40%;
+  float: right;
+  width: 40%;
+  padding-bottom: 0.2em;
 }
 
 textarea#input {
@@ -72,17 +68,23 @@ div.clickable:hover {
   transition-duration: 0.2s;
 }
 
-
 .resultItem {
-  margin: 0.5em 0em;
+  padding: 0.0em 0.2em;
+/*   margin: 0.2em auto; */
 }
 
-.featureName {
-  float: left;
+.oddColor { background-color: white; }
+.evenColor { background-color: #cfd1d8; }
+
+.resultFeatures {
+  width: 70%;
+  display: inline-block;
+  vertical-align: middle;
 }
 
-.featureValue {
-  float: right;
+.resultValue {
+  vertical-align: middle;
+  display: inline-block;
 }
 
 .clear {

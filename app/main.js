@@ -1,7 +1,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {featureGain} from './interactions.js';
+import {featureGain, splitString} from './interactions.js';
 
 function Button(props) {
   return (
@@ -56,7 +56,7 @@ function UploadForm(props) {
         onChange={props.onChange}
       />
       <Button
-        className="fileUploader clickable"
+        className="clickable"
         style={props.style}
         onClick={props.onClick}
         value="Upload saved trees (JSON)"
@@ -66,13 +66,33 @@ function UploadForm(props) {
 }
 
 function ResultRow(props) {
+  let features = splitString(props.features, "×")
+    .map((s, i) => { return <p key={i}>{s}</p> });
+  let colorMixin = "";
+  if (props.even === true) {
+    colorMixin = "evenColor";
+  } else {
+    colorMixin = "oddColor";
+  }
   return (
-      <div className="resultItem">
-        <div>
-          <span className="featureName">{props.features}</span>
-          <span className="featureValue">{Math.round(props.value*1000)/1000}</span>
-        </div>
+      <div className={"resultItem " + colorMixin}>
+        <div className="resultFeatures">{features}</div>
+        <div className="resultValue">{Math.round(props.value*10000)/10000}</div>
         <div className="clear"></div>
+      </div>
+  );
+}
+
+function HelpBlurb(props) {
+  return(
+      <div className={props.className}>
+        <p>The 'importance' of a predictor in a decision tree can be approximated by the mean relative gain attained whenever that predictor is used to split a node. This is a generalization of feature importance to sequences of features, which may be used to better understand a dataset and infer interactions between predictors.</p>
+
+        <ol>
+          <li>Enter a JSON array of decision trees or upload a file</li>
+          <li>Set the degree of the feature interactions (0 is equivalent to no interactions)</li>
+          <li>Click <em>"Scan tree"</em> to see the computed feature imporatnces</li>
+        </ol>
       </div>
   );
 }
@@ -83,7 +103,7 @@ class Application extends React.Component {
     this.state = {
       inputFile: "",
       inputText: DEFAULT_TREE,
-      degree: 0,
+      degree: 1,
       items: [{
         features: "Nothing",
         value: 0.0
@@ -143,10 +163,13 @@ class Application extends React.Component {
 
     // Search for interactions
     if (trees != null) {
-      let imp = featureGain(trees, this.state.degree);
+      const imp = featureGain(trees, this.state.degree);
+      const total = imp
+        .map((a) => { return a.mean; })
+        .reduce((a, b) => { return a+b; });
       let ngrams = [];
       for (let i = 0; i != imp.length; i++) {
-        ngrams.push({ features: imp[i].name, value: imp[i].mean });
+        ngrams.push({ features: imp[i].name, value: imp[i].mean/total });
       }
       this.setState({items: ngrams});
     }
@@ -163,8 +186,8 @@ class Application extends React.Component {
   }
 
   render() {
-    const listItems = this.state.items.map((item, i) => {
-      return <ResultRow key={i} features={item.features} value={item.value} />;
+    const resultRows = this.state.items.map((item, i) => {
+      return <ResultRow key={i} even={(i%2)!=0} features={item.features} value={item.value} />;
     })
     return (
         <div id="appContainer">
@@ -205,7 +228,7 @@ class Application extends React.Component {
             </div>
 
             <div className="clear">
-              {listItems}
+              {resultRows}
             </div>
           </div>
         </div>
@@ -292,16 +315,6 @@ const DEFAULT_TREE = `[  { "nodeid": 0, "depth": 0, "split": "odor=pungent", "ye
       { "nodeid": 6, "leaf": 0.277301, "cover": 11.8083 }
     ]}
   ]}]`;
-
-function HelpBlurb(props) {
-  return(
-      <div className={props.className}>
-        <p>The 'importance' of a predictor in a decision tree can be approximated by the mean relative gain attained whenever that predictor is used to split a node. This is a generalization of feature importance to sequences of features, which may be used to better understand a dataset and infer interactions between predictors.</p>
-
-        <p>Enter an array of decision trees in JSON format or uploaded a file. Set the degree of the feature interactions (0 is equivalent to no interactions), and hit "Scan tree."</p>
-      </div>
-  );
-}
 
 ReactDOM.render(
   <Application />,

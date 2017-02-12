@@ -13,7 +13,7 @@ function scanTree(ns, callback, maxDepth) {
   }
 }
 
-function splitString(s, by) {
+export function splitString(s, by) {
   if (typeof(by) === 'undefined') {
     by = ' ';
   }
