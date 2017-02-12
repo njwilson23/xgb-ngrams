@@ -1,52 +1,53 @@
 #appContainer {
-    width: 100%;
-    max-width: 200em;
-    margin: auto;
+  width: 100%;
+  max-width: 200em;
+  margin: auto;
 }
 
 body {
-    font-family: Lato, sans-serif;
-    font-weight: 300;
-    background-color: #0079b2;
+  font-family: Lato, sans-serif;
+  font-weight: 300;
+  background-color: #0079b2;
 }
 
 h1 {
-    font-weight: 300;
-    color: white;
+  font-weight: 300;
+  color: white;
 }
 
-.col {
-    background-color: white;
-
-    margin-top: 0.5em;
-    margin-bottom: 1em;
-
-    border-width: 0;
-    border-radius: 5px;
+div.inputGroup, div.outputGroup {
+  vertical-align: top;
+  padding-bottom: 5px;
+  margin-top: 0.5em;
+  border-radius: 5px;
+  border-width: 0;
+  background-color: white;
+  display: inline-block;
 }
 
-.left {
-  float: left;
-  width: 59%;
+div.inputGroup { width: 55%; }
+
+div.outputGroup {
+  width: calc(45% - 0.5em);
+  margin-left: 0.5em;
 }
 
-.right {
-  float: right;
-  width: 40%;
-  padding-bottom: 0.2em;
+@media (orientation: portrait) {
+  div.inputGroup, div.outputGroup { width: 100%; }
+  div.outputGroup { margin-left: 0px; }
 }
 
 textarea#input {
-    margin: auto;
-    padding: 0.5em;
-    width: calc(100% - 5px);
-    height: 80vh;
+  margin: auto;
+  padding: 0.5em;
+  width: 100%;
+  height: 75vh;
 
-    font-family: 'Fira Mono', mono;
-    font-size: 10pt;
+  font-family: 'Fira Mono', mono;
+  font-size: 10pt;
 
-    border-width: 0;
-    border-top-left-radius: 5px;
+  border-width: 0;
+  border-top-left-radius: 5px;
 }
 
 #fileUploader {
@@ -99,20 +100,27 @@ div.clickable:hover {
   border-radius: 5px;
 }
 
+.helpActive, .helpInactive {
+  transition-duration: 0.2s;
+}
+
 .helpActive {
   background-color: white;
   font-size: 14pt;
   width: 100%;
   height: 30%;
-  margin-top: 0.5em;
+  max-height: 16em;
+  margin: 0.5em auto;
   border-radius: 5px;
   overflow-y: scroll;
-  transition-duration: 0.2s;
 }
 
 .helpInactive {
   width: 0px;
   height: 0px;
-  transition-duration: 0.2s;
   overflow: hidden;
+}
+
+@media (orientation: portrait) {
+  .helpActive { height: 90%; max-height: 24em; }
 }

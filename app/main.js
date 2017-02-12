@@ -57,7 +57,7 @@ function UploadForm(props) {
       />
       <Button
         className="clickable"
-        style={props.style}
+        style={{borderTopLeftRadius: "5px", borderTopRightRadius: "5px"}}
         onClick={props.onClick}
         value="Upload saved trees (JSON)"
       />
@@ -86,8 +86,7 @@ function ResultRow(props) {
 function HelpBlurb(props) {
   return(
       <div className={props.className}>
-        <p>The 'importance' of a predictor in a decision tree can be approximated by the mean relative gain attained whenever that predictor is used to split a node. This is a generalization of feature importance to sequences of features, which may be used to better understand a dataset and infer interactions between predictors.</p>
-
+        <p>The 'importance' of a predictor in a decision tree can be approximated by the mean relative gain attained whenever that predictor is used to split a node. One might generalize this to sequences of features on order to better understand a dataset and infer interactions between predictors.</p>
         <ol>
           <li>Enter a JSON array of decision trees or upload a file</li>
           <li>Set the degree of the feature interactions (0 is equivalent to no interactions)</li>
@@ -195,20 +194,19 @@ class Application extends React.Component {
           <HelpBlurb className={this.state.helpClass} />
           <div className="clear"/>
 
-          <div className="col left">
+          <div className="inputGroup">
+            <UploadForm
+              onChange={(files) => this.handleFileUpload(files)}
+              onClick={() => { document.getElementById("fileUploader").click(); }}
+            />
+
             <InputForm
               value={this.state.inputText}
               onChange={(event) => { this.setState({inputText: event.target.value}); }}
             />
-
-            <UploadForm
-              style={{borderBottomLeftRadius: "5px", borderBottomRightRadius: "5px"}}
-              onChange={(files) => this.handleFileUpload(files)}
-              onClick={() => { document.getElementById("fileUploader").click(); }}
-            />
           </div>
 
-          <div className="col right">
+          <div className="outputGroup">
             <div style={{width: "30%", float: "left"}}>
               <DegreeForm
                 value={this.state.degree}
