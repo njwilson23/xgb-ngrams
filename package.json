@@ -1,5 +1,5 @@
 {
-  "name": "xgbinteract",
+  "name": "xgb-ngrams",
   "version": "0.1.0",
   "description": "",
   "main": "webpack.config.js",
@@ -15,7 +15,8 @@
     "babel-preset-react": "^6.22.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
-    "webpack": "^2.2.1"
+    "webpack": "^2.2.1",
+    "webpack-uglify-js-plugin": "^1.1.9"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

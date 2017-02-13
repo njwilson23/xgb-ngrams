@@ -4,13 +4,13 @@ function scanTree(ns, callback, maxDepth) {
   if (typeof(maxDepth) === 'undefined') {
     maxDepth = -1;
   }
-  for (let i = 0; i != ns.length && i != maxDepth; i++) {
-    let n = ns[i];
+  if (maxDepth === 0) { return; }
+  ns.forEach((n) => {
     if (n.children) {
       callback(n);
       scanTree(n.children, callback, maxDepth - 1);
     }
-  }
+  });
 }
 
 export function splitString(s, by) {
@@ -46,23 +46,19 @@ function accumulateSplits(n, maxDepth) {
     return [{features: n.split, count: 1, gain: n.gain}];
   }
 
-  let results = new Array();
-  let subResults, feats;
-  let currentFeatures = new Array();
-
-  for (let i = 0; i != n.children.length; i++) {
-    subResults = accumulateSplits(n.children[i], maxDepth - 1)
-    for (let j = 0; j != subResults.length; j++) {
-      feats = splitString(subResults[j].features)
-        .filter(function(a) { return a !== "" });
+  const partialResults = n.children.map((child) => {
+    let subResults = accumulateSplits(child, maxDepth - 1);
+    return subResults.map(( sr, j ) => {
+      let feats = splitString(sr.features)
+        .filter( (a) => { return a !== "" } );
       feats.push(n.split);
       feats.sort();
-      results.push( {features: feats.reduce((a, b) => { return a + "×" + b; }),
-                     count: 1 + subResults[j].count,
-                     gain: n.gain + subResults[j].gain} );
-    }
-  }
-  return results;
+      return {features: feats.reduce((a, b) => { return a + "×" + b; }),
+              count: 1 + sr.count,
+              gain: n.gain + sr.gain};
+    });
+  });
+  return partialResults.reduce((a, b) => { return a.concat(b); });
 }
 
 /* Compute the arithmetic mean of an array */
@@ -80,8 +76,7 @@ export function featureGain(trees, degree) {
        of length degree) and a 'gain' member (number) */
     let featSets = accumulateSplits(n, degree);
     let fs;
-    for (let i = 0; i != featSets.length; i++) {
-      fs = featSets[i];
+    featSets.forEach((fs) => {
       if (fs.count == degree + 1) {
         if (features.has(fs.features)) {
           features.get(fs.features).push(fs.gain);
@@ -89,7 +84,7 @@ export function featureGain(trees, degree) {
           features.set(fs.features, [fs.gain]);
         }
       }
-    }
+    });
   });
 
   let featureList = new Array();
