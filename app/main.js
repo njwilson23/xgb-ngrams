@@ -138,10 +138,8 @@ class Application extends React.Component {
   handleDegreeChange(increase) {
     const originalDegree = this.state.degree;
     if (increase == true) {
-      console.log("increase");
       this.setState({degree: Math.min(4, originalDegree + 1)});
     } else if (increase == false) {
-      console.log("decrease");
       this.setState({degree: Math.max(0, originalDegree - 1)});
     }
   }
