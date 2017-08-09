@@ -19,7 +19,7 @@ export function splitString(s, by) {
   }
   let s_;
   if (typeof(s.indexOf) === 'undefined') {
-    s_ = String(3);
+    s_ = String(s);
   } else {
     s_ = s
   }
