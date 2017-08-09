@@ -66,14 +66,9 @@ function UploadForm(props) {
 }
 
 function ResultRow(props) {
-  let features = splitString(props.features, "×")
+  const features = splitString(props.features, "×")
     .map((s, i) => { return <p key={i}>{s}</p> });
-  let colorMixin = "";
-  if (props.even === true) {
-    colorMixin = "evenColor";
-  } else {
-    colorMixin = "oddColor";
-  }
+  const colorMixin = (props.even === true) ? "evenColor" : "oddColor";
   return (
       <div className={"resultItem " + colorMixin}>
         <div className="resultFeatures">{features}</div>
@@ -162,11 +157,11 @@ class Application extends React.Component {
     if (trees != null) {
       const imp = featureGain(trees, this.state.degree);
       const total = imp
-        .map((a) => { return a.mean; })
+        .map((a) => { return a.sum; })
         .reduce((a, b) => { return a+b; });
       let ngrams = [];
       for (let i = 0; i != imp.length; i++) {
-        ngrams.push({ features: imp[i].name, value: imp[i].mean/total });
+        ngrams.push({ features: imp[i].name, value: imp[i].sum/total });
       }
       this.setState({items: ngrams});
     }
