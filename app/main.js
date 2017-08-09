@@ -85,7 +85,7 @@ function HelpBlurb(props) {
         <ol>
           <li>Enter a JSON array of decision trees or upload a file</li>
           <li>Set the degree of the feature interactions (0 is equivalent to no interactions)</li>
-          <li>Click <em>"Scan tree"</em> to see the computed feature imporatnces</li>
+          <li>Click <em>"Scan tree"</em> to see the computed feature importances</li>
         </ol>
       </div>
   );
